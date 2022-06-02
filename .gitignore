@@ -1,0 +1,23 @@
+# IDE
+*.idea/
+*.vscode/
+
+# global tex
+*gz
+*toc
+*out
+*pdf
+*blg
+*log
+*aux
+*bbl
+*dvi
+
+# algo
+*__pycache__/
+*ex2.pdf
+*bak
+
+# pf
+/pf/pacman-racket/
+/pf/pf2/projects/
