@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Software Atelier 1 - Hands On 4</title>
+    <meta name="author" content="Jeferson Morales Mariciano" />
+  </head>
+
+  <body>
+    <img src="usi_long_logo.png" alt="usi logo" width="400" height="200" />
+    <h1>Software Atelier 1</h1>
+    <h2>Hands ON - <i>HTML</i></h2>
+    <p>October 15, 2021</p>
+    <h3 id="menu">Menu</h3>
+    <p>Click on one item of the menu to jump to hte corresponding section.</p>
+    <ol>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#synopsis">Synopsis</a></li>
+      <li><a href="#description">Description</a></li>
+      <li><a href="#implementation">Implementation</a></li>
+      <li><a href="#remarks">Remarks</a></li>
+    </ol>
+
+    <h3 id="synopsis">Synopsis</h3>
+    <p>
+      In this hands on you have to create an HTML page that shows the usage of
+      some HTML tags.
+    </p>
+
+    <h3 id="description">Description</h3>
+    <p>
+      The goal of this hands on is to recreate this web page. Procede following
+      these steps:
+    </p>
+    <ol>
+      <li>
+        Reproduce this web page by using the tags you saw during the lecture.
+        Set "Software Atelier 1 - Hands On 4" as the title of the page, and use
+        the
+        <code>meta</code> tag to specify your name as the author of the page.
+        Validate your page against
+        <a href="http://validator.w3.org/">http://validator.w3.org/</a> before
+        proceeding to the step 2.
+      </li>
+
+      <li>
+        Create the page <code>page2.html</code> in the same directory of the
+        current page, then add a link to <a href="page2.html">page2</a> (named
+        <code>page2.html</code>).
+      </li>
+
+      <li>
+        Copy the table from the <i>Implementation</i> section into
+        <code>page2.html</code> and complete it with HTML tags from the slides.
+        <b>Choose at least 3 new tags</b>. While completing the table, follow
+        this convention: On the left column, put the tag you are using; On the
+        right column put an example using the tag.
+
+        <p>
+          While writing an HTML tag, surround it with the &lt;code&gt; tag.
+          Also, the characters &lt; &gt; and &amp; have a special meaning in
+          HTML. To print them use the following codes (called
+          <i>HTML</i> entities):
+        </p>
+        <ul>
+          <li>&amp;lt; to print &lt;</li>
+          <li>&amp;gt; to print &gt;</li>
+          <li>&amp;amp; to print &amp;</li>
+        </ul>
+
+        <p>
+          <b>Example</b>: use
+          <code>&lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt;</code> to write
+          <code>&lt;div&gt;</code>.
+        </p>
+      </li>
+
+      <li>
+        If you finish early, you can try to explore HTML <i>attributes</i>. Try
+        adding the attribute
+        <code>style="background:orange" or style="color:red"</code> to a tag.
+        <br />
+        <b>Example:</b>
+        <code>
+          &lt;div style="background:orange"&gt;This is some text in a
+          div&lt;div&gt;
+        </code>
+        . What is the effect?
+      </li>
+    </ol>
+
+    <h3 id="implementation">Implementation</h3>
+    <table border="1">
+      <tr>
+        <th>HTML Tag</th>
+        <th>Usage Example</th>
+      </tr>
+      <tr>
+        <td>&lt;p&gt;</td>
+        <td>Some text into paragraph</td>
+      </tr>
+      <tr>
+        <td>&lt;img&gt;</td>
+        <td>
+          <img
+            src="margaret_hamilton_in_action.jpg"
+            alt="Margaret Hamilton"
+            width="600"
+            height="500"
+          />
+          <br />
+          <center>
+            A picture of Margaret Hamilton
+            <br />
+            <em>
+              (Source:
+              <a
+                href="https://en.wikipedia.org/wiki/Margaret_Hamilton_(software_engineer)"
+                >Wikipedia </a
+              >)
+            </em>
+          </center>
+        </td>
+      </tr>
+      <tr>
+        <td>&lt;table&gt;</td>
+        <td>
+          <table border="1">
+            <tr>
+              <td>one</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>two</td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <td>three</td>
+              <td>3</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>&lt;...&gt;</td>
+        <td>? <i>(See point 3 of the Description section)</i></td>
+      </tr>
+    </table>
+    <br />
+    <h3 id="remarks">Remarks</h3>
+    <ol>
+      <li>
+        You can use any text editor such as
+        <a href="https://atom.io/">Atom</a> to write your HTML code.
+      </li>
+      <li>
+        You can download the USI logo from
+        <a href="https://goo.gl/2BB4ve">https://goo.gl/2BB4ve</a>
+      </li>
+      <li>
+        Remember: <code>Ctrl+S</code> to save, <code>Alt+Tab</code> to switch to
+        the browser and <code>Ctrl+R</code> to refresh the web page.
+        <br />
+        Make it your mantra!
+      </li>
+    </ol>
+  </body>
+</html>
