@@ -6,7 +6,6 @@
 *gz
 *toc
 *out
-*pdf
 *blg
 *log
 *aux
@@ -16,12 +15,23 @@
 # algo
 *__pycache__/
 *ex2.pdf
-*bak
+/algo/*bak
+/algo/ex2.pdf
+
+# atelier
+/atelier/latex/handons.pdf
 
 # ca
 /ca/Digital/
 /ca/Mic1MMV/
+/ca/Exercise12_2.pdf
+/ca/morales_assign1.pdf
 
 # pf
 /pf/pacman-racket/
 /pf/pf2/projects/
+
+# math
+/math/*2.pdf
+/math/*3.pdf
+/math/*4.pdf
