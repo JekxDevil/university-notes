@@ -10,3 +10,5 @@ pf/pacman-racket/ is in .gitignore because the pacman game project developed in 
 Programming Fundamentals 1 has now it's own repository.
 
 Computer Architecure assignments are in my google drive, they need to be corrected and uploaded.
+
+In PF2, needs to add a link to the project about risk-kellogs
