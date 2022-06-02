@@ -1,39 +1,52 @@
 [submodule "pf/pf2/code-exercises"]
 	path = pf/pf2/code-exercises
 	url = git@github.com:usi-pf2-2022/code-exercises-gief.git
+  branch=main
 [submodule "pf/pf2/lab-00"]
 	path = pf/pf2/lab-00
 	url = git@github.com:usi-pf2-2022/lab-00-JekxDevil.git
+  branch=main
 [submodule "pf/pf2/lab-01"]
 	path = pf/pf2/lab-01
 	url = git@github.com:usi-pf2-2022/lab-01-JekxDevil.git
+  branch=main
 [submodule "pf/pf2/lab-03"]
 	path = pf/pf2/lab-03
 	url = git@github.com:usi-pf2-2022/lab-03-JekxDevil.git
+  branch=main
 [submodule "pf/pf2/lab-04"]
 	path = pf/pf2/lab-04
 	url = git@github.com:usi-pf2-2022/lab-04-JekxDevil.git
+  branch=main
 [submodule "pf/pf2/lab-05"]
 	path = pf/pf2/lab-05
 	url = git@github.com:usi-pf2-2022/lab-05-JekxDevil.git
+  branch=main
 [submodule "pf/pf2/lab-06"]
 	path = pf/pf2/lab-06
 	url = git@github.com:usi-pf2-2022/lab-06-JekxDevil.git
+  branch=main
 [submodule "pf/pf2/lab-07"]
 	path = pf/pf2/lab-07
 	url = git@github.com:usi-pf2-2022/lab-07-JekxDevil.git
+  branch=main
 [submodule "pf/pf2/lab-08"]
 	path = pf/pf2/lab-08
 	url = git@github.com:usi-pf2-2022/lab-08-JekxDevil.git
+  branch=main
 [submodule "pf/pf2/lab-09"]
 	path = pf/pf2/lab-09
 	url = git@github.com:usi-pf2-2022/lab-09-JekxDevil.git
+  branch=main
 [submodule "pf/pf2/lab-10"]
 	path = pf/pf2/lab-10
 	url = git@github.com:usi-pf2-2022/lab-10-JekxDevil.git
+  branch=main
 [submodule "pf/pf2/model-ui-example"]
 	path = pf/pf2/model-ui-example
 	url = git@github.com:usi-pf2-2022/model-ui-example4-JekxDevil.git
+  branch=main
 [submodule "pf/pf1/pacman-racket"]
 	path = pf/pf1/pacman-racket
 	url = git@github.com:JekxDevil/pacman-racket.git
+  branch=main
