@@ -28,6 +28,9 @@
 /ca/morales_assign1.pdf
 
 # pf
+/pf/pf1/*swp
+/pf/pf1/*~
+/pf/pf1/*0.rkt
 /pf/pacman-racket/
 /pf/pf2/projects/
 
