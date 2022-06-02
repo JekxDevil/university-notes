@@ -34,3 +34,6 @@
 [submodule "pf/pf2/model-ui-example"]
 	path = pf/pf2/model-ui-example
 	url = git@github.com:usi-pf2-2022/model-ui-example4-JekxDevil.git
+[submodule "pf/pf1/pacman-racket"]
+	path = pf/pf1/pacman-racket
+	url = git@github.com:JekxDevil/pacman-racket.git
