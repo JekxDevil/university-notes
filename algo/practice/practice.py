@@ -217,14 +217,111 @@ def ex214(myl):
     result = []
     min1 = myl[0]
     for i in range(len(myl)):
-        if min > myl[i]
+        if min > myl[i]:
             min = myl[i]
 
 
     return result
 
 
+class BST:
+    class Node:
+        def __init__(self, key, parent=None, left=None, right=None):
+            self.parent = parent
+            self.key = key
+            self.left = left
+            self.right = right
+
+    def __init__(self):
+        self.root = None
+
+    def insert_all(self, values):
+        for x in values:
+            self.insert(x)
+
+    def insert(self, x):
+        newnode = BST.Node(x)
+        parent = None
+        node = self.root
+        while node is not None:
+            parent = node
+            if newnode.key <= node.key:
+                node = node.left
+            else:
+                node = node.right
+        newnode.parent = parent
+        if parent is None:
+            self.root = newnode
+        else:
+            if newnode.key <= parent.key:
+                parent.left = newnode
+            else:
+                parent.right = newnode
+
+    def delete(self, x):
+        pass
+
+    def search(self, x):
+        node = self.root
+        while node is not None:
+            if x == node.key:
+                return True
+
+            if x < node.key:
+                node = node.left
+            else:
+                node = node.right
+        return False
+
+    @staticmethod
+    def successor(x):
+        original = x
+        if x.right is not None:
+             x = x.right
+        while x.left is not None:
+            x = x.left
+        return x if not x == original else None
+
+    @staticmethod
+    def predecessor(self, x):
+        original = x
+        if x.left is not None:
+            x = x.left
+        while x.right is not None:
+            x = x.right
+        return x if not x == original else None
+
+    def increasing_walk(self, node=None):
+        if node is None:
+            node = self.root
+            print('[', end='')
+
+        if node.left is not None:
+            self.increasing_walk(node.left)
+
+        print(f'{node.key} ', end='')
+
+        if node.right is not None:
+            self.increasing_walk(node.right)
+
+        if node == self.root:
+            print(']')
+
+    def min(self):
+        node = self.root
+        while node.left is not None:
+            node = node.left
+        return node.key
+
+    def max(self):
+        node = self.root
+        while node.right is not None:
+            node = node.right
+        return node.key
+
+
 if __name__ == '__main__':
+    '''
     A = [1, 100, 1, 2, 10, 12, 6, 8]
     B = [3, 7, 1, 5, 10, 12, 6, 8]
     C = [7, 62, 5, 57, 12, 39, 5, 8, 16, 48]
@@ -251,3 +348,11 @@ if __name__ == '__main__':
     print(f"ex118 = {ex118([(0,0), (0,2), (2,2), (2,0), (1, 0)])}")
     # print(f"michi = {tw_merge_sort(C)}")
     print(f"ex214 = {ex214([3, 6, 5, 1])}")
+    '''
+    mybst = BST()
+    mybst.insert_all([6, 4, 7, 3, 9, 1])
+    mybst.increasing_walk()
+    print(mybst.min(), mybst.max())
+    print(mybst.search(-1) is False, mybst.search(9) is True, mybst.search(3) is True, mybst.search(7) is True)
+    print(BST.successor(), BST.successor(), BST.successor())
+    print(BST.predecessor(), BST.predecessor(), BST.predecessor())
