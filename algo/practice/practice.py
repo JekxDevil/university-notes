@@ -1,3 +1,6 @@
+import queue
+
+
 def ex100(l: list):
     tuples = []
     for i in range(0, len(l), 2):
@@ -425,6 +428,183 @@ class BST:
             return BST.lrotate(tree)
 
 
+class MyRBTree:
+    class Node:
+        def __init__(self, key=None, parent=None, left=None, right=None, color=False):
+            # sentinel has no key, no parent, no left, no right, and its color is black (False)
+            self.key = key
+            self.parent = parent
+            self.left = left
+            self.right = right
+            self.color = color
+
+        def is_sentinel(self):
+            return (self.key is None
+                    and self.parent is None
+                    and self.left is None
+                    and self.right is None
+                    and self.color is False)
+
+        def is_root(self):
+            return self.parent.is_sentinel() or self.root == self.nil
+
+        def is_leaf(self):
+            return self.right.is_sentinel() and self.left.is_sentinel()
+
+    def __init__(self):
+        self.nil = MyRBTree.Node()
+        self.root = self.nil
+
+    def __str__(self):
+        # bfs
+        tree_string = ''
+        node = self.root
+        if node == self.nil:
+            return tree_string
+
+        q = queue.Queue()
+        q.put(node)
+        while not q.empty():
+            if not node.left.is_sentinel():
+                tree_string += f'{node.key} -> {node.left.key}\n'
+                q.put(node.left)
+            if not node.right.is_sentinel():
+                tree_string += f'{node.key} -> {node.right.key}\n'
+                q.put(node.right)
+            node = q.get()
+        return tree_string
+
+    @staticmethod
+    def bh(node):
+        leaves = []
+        q = queue.Queue()
+        if not node.is_sentinel():
+            q.put(node)
+
+        # bfs(|V| + |E|)
+        while not q.empty():
+            n = q.get()
+            if n.is_leaf():
+                leaves.append(n)
+
+            if not n.left.is_sentinel():
+                q.put(n.left)
+            if not n.right.is_sentinel:
+                q.put(n.right)
+
+        # count black correspondence - up scaling, particular dfs
+        blacks = set()
+        for l in leaves:
+            sum = 0
+            while not l.is_root():
+                if not l.color:
+                    sum += 1
+                l = l.parent
+            if sum not in blacks:
+                blacks.add(sum)
+
+        return blacks.pop() if len(blacks) == 1 else None
+
+    def insert(self, key):
+        node = self.root
+        parent = self.nil
+        while not node == self.nil:
+            parent = node
+            if key <= node:
+                node = node.left
+            else:
+                node = node.right
+        newnode = MyRBTree.Node(key=key, parent=parent)
+        if parent == self.nil:
+            self.root = newnode
+        elif newnode.key <= parent.key:
+            parent.left = newnode
+        else:
+            parent.right = newnode
+        newnode.left = self.nil
+        newnode.right = self.nil
+        newnode.color = True
+        self.insert_correct(newnode)
+
+    def insert_correct(self, z):
+        while z.parent.color:
+            # is node parent a left child?
+            if z.parent == z.parent.parent.left:
+                y = z.parent.parent.right   # get uncle
+                if y.color:
+                    z.parent.color = False
+                    y.color = False
+                    z.parent.parent.color = True
+                    z = z.parent.parent
+                else:
+                    if z == z.parent.right:
+                        z = z.parent
+                        MyRBTree.lrotate(z)
+                    z.parent.color = False
+                    z.parent.parent.color = True
+                    MyRBTree.rrotate(z.parent.parent)
+            else:
+                y = z.parent.parent.left # get uncle
+                if y.color:
+                    z.parent.color = False
+                    y.color = False
+                    z.parent.parent.color = True
+                    z = z.parent.parent
+                else:
+                    if z == z.parent.left:
+                        z = z.parent
+                        MyRBTree.rrotate(z)
+                    z.parent.color = False
+                    z.parent.parent.color = True
+                    MyRBTree.lrotate(z.parent.parent)
+
+        self.root.color = False     # keep 1 rule
+
+    @staticmethod
+    def lrotate(rbt, x):
+        r = x.right                     # 1
+        x.right = r.left                # 2
+        if not x.right.is_sentinel():   # 3
+            x.right.parent = x          # 4
+        r.left = x                      # 11
+        r.parent = x.parent             # 5
+        x.parent = r                    # 12
+        if x.parent.is_sentinel():      # 6
+            rbt.root = r                # 7
+        elif r.parent.left == x:        # 8
+            r.parent.left = r           # 9
+        else:                           # 10
+            r.parent.right = r          # 10
+
+    @staticmethod
+    def rrotate(rbt, x):
+        l = x.left
+        x.left = l.right
+        if not l.right.is_sentinel():
+            l.right.parent = x
+        l.parent = x.parent
+        if x.parent.is_sentinel():
+            rbt.root = l
+        elif x == x.parent.left:
+            x.parent.left = l
+        else:
+            x.parent.right = l
+        l.right = x
+        x.parent = l
+
+    def search(self, key):
+        node = self.root
+        while not node == self.nil:
+            if node.key == key:
+                return node
+
+            if key < node.key:
+                node = node.left
+            else:
+                node.right
+        return None
+
+
 if __name__ == '__main__':
     '''
     A = [1, 100, 1, 2, 10, 12, 6, 8]
@@ -475,7 +655,6 @@ if __name__ == '__main__':
     print('delete 4')
     mybst.delete(mybst.root.left)
     mybst.increasing_walk()
-    '''
     mybst = BST()
     mybst.insert_all([15, 4, 1, 7, 5, 13, 6, 10, 9])
     mybst.increasing_walk()
@@ -483,3 +662,4 @@ if __name__ == '__main__':
     mybst.increasing_walk()
     mybst.root_insert(8)
     mybst.increasing_walk()
+    '''
