@@ -232,6 +232,9 @@ class BST:
             self.left = left
             self.right = right
 
+        def __str__(self):
+            return f'{self.key}'
+
     def __init__(self):
         self.root = None
 
@@ -259,37 +262,84 @@ class BST:
                 parent.right = newnode
 
     def delete(self, x):
-        pass
+        parent = x.parent
+
+        # root deletion
+        if parent is None:
+            self.root = None
+            return
+
+        # leaf deletion
+        if x.left is None and x.right is None:
+            if parent.left == x:
+                parent.left = None
+            else:
+                parent.right = None
+
+        # 2 children deletion - find successor, copy key and delete successor recursively which must have only 1 child
+        if x.left is not None and x.right is not None:
+            suc = BST.successor(x)
+            val = suc.key
+            self.delete(suc)
+            x.key = val
+            return
+
+        # 1 child deletion
+        if x.left is not None:
+            # only left child
+            x.left.parent = parent
+            if parent.left == x:
+                parent.left = x.left
+            else:
+                parent.right = x.left
+            return
+        else:
+            # only right child
+            x.right.parent = parent
+            if parent.left == x:
+                parent.left = x.right
+            else:
+                parent.right = x.right
+            return
 
     def search(self, x):
         node = self.root
         while node is not None:
             if x == node.key:
-                return True
+                return node
 
             if x < node.key:
                 node = node.left
             else:
                 node = node.right
-        return False
+        return node
 
     @staticmethod
     def successor(x):
-        original = x
         if x.right is not None:
-             x = x.right
-        while x.left is not None:
-            x = x.left
-        return x if not x == original else None
+            x = x.right
+            x = BST.min(x)
+            return x
+        else:
+            it = x.parent
+            while not it.left == x and it is not None:
+                x = it
+                it = x.parent
+            return it
 
     @staticmethod
-    def predecessor(self, x):
+    def predecessor(x):
         original = x
         if x.left is not None:
             x = x.left
-        while x.right is not None:
-            x = x.right
-        return x if not x == original else None
+            x = BST.max(x)
+            return x
+        else:
+            it = x.parent
+            while not it.right == x and it is not None:
+                x = it
+                it = x.parent
+            return it
 
     def increasing_walk(self, node=None):
         if node is None:
@@ -307,17 +357,72 @@ class BST:
         if node == self.root:
             print(']')
 
-    def min(self):
-        node = self.root
+    @staticmethod
+    def min(node):
+        """ O(n), OHM(logn) """
         while node.left is not None:
             node = node.left
-        return node.key
+        return node if node is not None else None
 
-    def max(self):
-        node = self.root
+    @staticmethod
+    def max(node):
+        """ O(n) , OHM(logn)"""
         while node.right is not None:
             node = node.right
-        return node.key
+        return node if node is not None else None
+
+    @staticmethod
+    def rrotate(node):
+        l = node.left
+        node.left = l.right
+        if l.right is not None:
+            l.right.parent = node
+        l.right = node
+        l.parent = node.parent
+        if l.parent is not None:
+            if l.parent.left.key == node.key:
+                l.parent.left = l
+            else:
+                l.parent.right = l
+        node.parent = l
+        return l
+
+    @staticmethod
+    def lrotate(node):
+        r = node.right
+        node.right = r.left
+        if r.left is not None:
+            r.left.parent = node
+        r.left = node
+        r.parent = node.parent
+        if r.parent is not None:
+            if r.parent.left.key == node.key:
+                r.parent.left = r
+            else:
+                r.parent.right = r
+        node.parent = r
+        return r
+
+    def root_insert(self, key):
+        self.root = BST.root_insertion(self.root, key)
+
+    @staticmethod
+    def root_insertion(tree, key, parent=None):
+        if tree is None:
+            node = BST.Node(key, parent)
+            if parent is not None:
+                if key <= parent.key:
+                    parent.left = node
+                else:
+                    parent.right = node
+            return node
+
+        if key <= tree.key:
+            tree.left = BST.root_insertion(tree.left, key, tree)
+            return BST.rrotate(tree)
+        else:
+            tree.right = BST.root_insertion(tree.right, key, tree)
+            return BST.lrotate(tree)
 
 
 if __name__ == '__main__':
@@ -348,11 +453,33 @@ if __name__ == '__main__':
     print(f"ex118 = {ex118([(0,0), (0,2), (2,2), (2,0), (1, 0)])}")
     # print(f"michi = {tw_merge_sort(C)}")
     print(f"ex214 = {ex214([3, 6, 5, 1])}")
+    mybst = BST()
+    mybst.insert_all([12, 5, 2, 9, 4, 18, 15, 19, 13, 17])
+    mybst.increasing_walk()
+    print(BST.min(mybst.root).key, BST.max(mybst.root).key)
+    print(mybst.search(-1), mybst.search(9), mybst.search(2), mybst.search(18))
+    print(BST.successor(mybst.root).key, BST.successor(mybst.root.left).key, BST.successor(mybst.root.right).key)
+    print(BST.predecessor(mybst.root).key, BST.predecessor(mybst.root.left).key, BST.predecessor(mybst.root.right).key)
+    print(BST.successor(mybst.root.right.left.left).key)
+    print(BST.predecessor(mybst.root.right.left.left).key)
+    mybst.insert(10)
+    print('to be deleted', mybst.root.left.key)
+    mybst.delete(mybst.root.left)
+    mybst.increasing_walk()
+    print('to be deleted', BST.min(mybst.root))
+    mybst.delete(BST.min(mybst.root))
+    mybst.increasing_walk()
+    mybst = BST()
+    mybst.insert_all([15,4,1,7,5,13,6,10,9])
+    mybst.increasing_walk()
+    print('delete 4')
+    mybst.delete(mybst.root.left)
+    mybst.increasing_walk()
     '''
     mybst = BST()
-    mybst.insert_all([6, 4, 7, 3, 9, 1])
+    mybst.insert_all([15, 4, 1, 7, 5, 13, 6, 10, 9])
     mybst.increasing_walk()
-    print(mybst.min(), mybst.max())
-    print(mybst.search(-1) is False, mybst.search(9) is True, mybst.search(3) is True, mybst.search(7) is True)
-    print(BST.successor(), BST.successor(), BST.successor())
-    print(BST.predecessor(), BST.predecessor(), BST.predecessor())
+    BST.lrotate(mybst.root.left.right)
+    mybst.increasing_walk()
+    mybst.root_insert(8)
+    mybst.increasing_walk()
