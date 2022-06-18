@@ -605,7 +605,35 @@ class MyRBTree:
         return None
 
 
+def topological_sort(Adj: list, map: dict):
+    mystack = []
+    discovery = [-1] * len(Adj)
+    finish = [-1] * len(Adj)
+    time = 0
+    for i in range(len(Adj)):
+        if discovery[i] == -1:
+            dfs(Adj, map, i, discovery, finish, mystack, time)
+
+    return [map[mystack.pop()] for i in range(len(mystack))]
+
+
+def dfs(Adj:list, map:dict, node:int, discovery:list, finish:list, mystack:list, time:int):
+    discovery[node] = time
+    time += 1
+    for i in Adj[node]:
+        if discovery[i] == -1:
+            dfs(Adj, map, i, discovery, finish, mystack, time)
+
+    finish[node] = time
+    time += 1
+    mystack.append(node)
+
+
 if __name__ == '__main__':
+    # adjacency list of a graph
+    map = {0:'cinta', 1:'pantaloni', 2:'mutande', 3:'felpa', 4:'canottiera'}
+    adj = [[3], [0], [1], [], [3]]
+    print(topological_sort(adj, map))
     '''
     A = [1, 100, 1, 2, 10, 12, 6, 8]
     B = [3, 7, 1, 5, 10, 12, 6, 8]
