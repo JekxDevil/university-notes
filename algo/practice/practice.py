@@ -605,36 +605,183 @@ class MyRBTree:
         return None
 
 
-def topological_sort(Adj: list, map: dict):
+def topological_sort(graph: list, map_name: dict):
     mystack = []
-    discovery = [-1] * len(Adj)
-    finish = [-1] * len(Adj)
+    discovery = [-1] * len(graph)
+    finish = [-1] * len(graph)
     time = 0
-    for i in range(len(Adj)):
+    for i in range(len(graph)):
         if discovery[i] == -1:
-            dfs(Adj, map, i, discovery, finish, mystack, time)
+            dfs(graph, map_name, i, discovery, finish, mystack, time)
 
-    return [map[mystack.pop()] for i in range(len(mystack))]
+    return [map_name[mystack.pop()] for i in range(len(mystack))]
 
 
-def dfs(Adj:list, map:dict, node:int, discovery:list, finish:list, mystack:list, time:int):
+def dfs(graph: list, map_name: dict, node: int, discovery: list, finish: list, mystack: list, time: int):
     discovery[node] = time
     time += 1
-    for i in Adj[node]:
+    for i in graph[node]:
         if discovery[i] == -1:
-            dfs(Adj, map, i, discovery, finish, mystack, time)
+            dfs(graph, map_name, i, discovery, finish, mystack, time)
 
     finish[node] = time
     time += 1
     mystack.append(node)
 
 
+def MST_Kruskal(graph: list, weights: list):
+    T = []
+    sets = []
+    # MAKE-SET: create a set foreach vertex in the graph
+    for i in range(len(graph)):
+        s = set()
+        s.add(i)
+        sets.append(s)
+    # sort edges
+    E = []
+    for idxfrom, edgs in enumerate(graph):
+        for idxto, edge in enumerate(edgs):
+            E.append((idxfrom, edge, weights[idxfrom][idxto]))
+    E.sort(key=lambda edge: edge[2])
+
+    # foreach edge if
+    for (u, v, we) in E:
+        s1 = find_set(sets, u)
+        s2 = find_set(sets, v)
+        if s1 is not s2:            # find(x) != find(y) then add to T and merge sets
+            T.append((u, v, we))
+            T.append((v, u, we))
+            if len(s1) < len(s2):
+                sets.remove(s1)
+                for el in s1:
+                    s2.add(el)
+            else:
+                sets.remove(s2)
+                for el in s2:
+                    s1.add(el)
+
+    # reconvert to graph
+    T.sort(key=lambda edge: edge[0])
+    tree = [[] for _ in range(len(graph))]
+    for (u, v, we) in T:
+        tree[u].append(v)
+    return tree
+
+
+def find_set(sets: set, x: int) -> set:
+    found = None
+    for s in sets:
+        if x in s:
+            found = s
+    return found
+
+
+def MST_Prim(graph: list, weights: list):
+    # set tree start, temp weights, and temp parents
+    T = [[] for _ in range(len(graph))]
+    W = [-1] * len(graph)
+    P = [-1] * len(graph)
+
+    # set start node as the first discovered: node 0, with its edges and weights in the pool, and W = 0
+    u = 0
+    pool = [(0, node, weights[0][idxnode]) for idxnode, node in enumerate(graph[0])]
+    for (nodeinit, nodeto, we) in pool:
+        W[nodeto] = we
+        P[nodeto] = nodeinit
+    W[u] = 0
+
+    # while the minimal spanning tree is not completed (some nodes are not reached by an edge)
+    while not is_spanning_tree(T):
+        # get min edge from pool among unreached nodes
+        u = min_edge(T, pool, weights, P, W)
+        # add edge to T
+        T[u].append(P[u])
+        T[P[u]].append(u)
+        # add edges from u to pool
+        for idx, edge in enumerate(graph[u]):
+            pool.append((u, edge, weights[u][idx]))
+
+        # delete reached edges()
+        delete_reached_edges(T, pool)
+        # for each node reached by u, update its W if weight can be better and parent if so, too
+        for idx, neighbor in enumerate(graph[u]):
+            if len(T[neighbor]) == 0 and (weights[u][idx] < W[neighbor] or W[neighbor] == -1):
+                W[neighbor] = weights[u][idx]
+                P[neighbor] = u
+    return T
+
+
+def delete_reached_edges(T, pool):
+    idxtodelete = []
+    for idx, (v, u, edgeweight) in enumerate(pool):
+        if len(T[v]) > 0 and len(T[u]) > 0:
+            del pool[idx]
+
+
+def min_edge(tree: list, pool: list, weights: list, P: list, W: list):
+    node = None
+    min_weight = None
+    idx = None
+    for tmpidx, (nodefrom, nodeto, edgeweight) in enumerate(pool):
+        if min_weight is None and len(tree[nodeto]) == 0:
+            node = nodeto
+            min_weight = edgeweight
+            idx = tmpidx
+        elif min_weight is not None and len(tree[nodeto]) == 0:
+            if edgeweight < min_weight:
+                node = nodeto
+                min_weight = edgeweight
+                idx = tmpidx
+
+    if node is not None:
+        pool.remove(pool[idx])
+    return node
+
+
+def is_spanning_tree(T: list):
+    # if some nodes are not reached by an edge return false
+    for edgs in T:
+        if len(edgs) == 0:
+            return False
+    return True
+
+
 if __name__ == '__main__':
+    map_names = {idx: c for idx, c in enumerate('abcdefghijkm')}
+    # every edge only once, if a node has already all edges in previous iteration, then add an empty list
+    meta_graph = [
+        [(4, 1), (5, 2)],
+        [(5, 1), (6, 3), (2, 1)],
+        [(6, 3), (3, 2)],
+        [(6, 1), (7, 2)],
+        [(8, 1)],
+        [(8, 1), (6, 3)],
+        [(9, 2), (10, 3), (7, 1)],
+        [(10, 3), (11, 3)],
+        [(9, 3)],
+        [],
+        [(11, 1)],
+        []
+    ]
+    adj = [[] for _ in range(len(map_names))]
+    weight = [[] for _ in range(len(map_names))]
+    for idxfrom, edges in enumerate(meta_graph):
+        for idxto, w in edges:
+            adj[idxfrom].append(idxto)
+            adj[idxto].append(idxfrom)
+            weight[idxfrom].append(w)
+            weight[idxto].append(w)
+    # print(adj)
+    # print(weight)
+    # mst = MST_Kruskal(adj, weight)
+    # for idx, edges in enumerate(mst):
+    #    print(map_names[idx], '->', [map_names[i] for i in edges])
+    print(MST_Prim(adj, weight))
+    '''
     # adjacency list of a graph
     map = {0:'cinta', 1:'pantaloni', 2:'mutande', 3:'felpa', 4:'canottiera'}
     adj = [[3], [0], [1], [], [3]]
     print(topological_sort(adj, map))
-    '''
     A = [1, 100, 1, 2, 10, 12, 6, 8]
     B = [3, 7, 1, 5, 10, 12, 6, 8]
     C = [7, 62, 5, 57, 12, 39, 5, 8, 16, 48]
