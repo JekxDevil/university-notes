@@ -746,7 +746,128 @@ def is_spanning_tree(T: list):
     return True
 
 
+def ex164(nums: list):
+    n = len(nums)
+    B = [0] * n
+    nums.sort()
+    for i in range(n-3):
+        j = i + 1
+        k = i + 2
+        while k < n:
+            if nums[i] + nums[j] == nums[k]:
+                B[k] = 1
+                k += 1
+            elif nums[i] + nums[j] < nums[k]:
+                j += 1
+            else:
+                k += 1
+
+    minimazed = []
+    for i in range(n):
+        if B[i] == 0:
+            minimazed.append(nums[i])
+    return minimazed
+
+
+def ex235(matrix: list) -> bool:
+    pass
+
+
+# DAG assumed
+def bellmanford(graph: list, nodefrom: int, nodeto: int):
+    if nodefrom == nodeto:
+        return 0
+
+    dmin = 1e7
+    for e, w in graph[nodefrom]:
+        dnext = bellmanford(graph, e, nodeto) + w
+        if dnext == 'inf':
+            continue
+        dmin = min(dmin, dnext) # molto meglio :D
+
+    return dmin
+
+
+def lis(nums: list) -> int:
+    n = len(nums)
+    dp = [None] * n
+    dp[0] = 1
+    for i in range(1, n):
+        maximum = 1
+        sequence = False
+        for j in range(0, i):
+            if nums[i] > nums[j] and dp[j] >= maximum:
+                maximum = dp[j]
+                sequence = True
+        dp[i] = maximum + 1 if sequence else 1
+    return max(dp)
+
+
+def edit_distance(a, b, i, j):
+    if i == len(a):
+        return len(b) - j
+    if j == len(b):
+        return len(a) - i
+    c = 0
+    if a[i] == b[j]:
+        c = 0
+    else:
+        c = 1
+    return min(
+        edit_distance(a, b, i+1, j+1) + c,  # add a word
+        edit_distance(a, b, i, j + 1) + 1,       # insert
+        edit_distance(a, b, i + 1, j) + 1       # delete
+    )
+
+
+
 if __name__ == '__main__':
+    a = [el for el in 'lugano']
+    b = [el for el in 'zurigo']
+    print(edit_distance(a, b, 0, 0))
+    '''
+    map_names = {idx: c for idx, c in enumerate('abcdefghijkm')}
+    meta_graph = [
+        [(4, 1), (5, 2)],
+        [(5, 1), (6, 3), (2, 1)],
+        [(6, 3), (3, 2)],
+        [(6, 1), (7, 2)],
+        [(8, 1)],
+        [(8, 1), (6, 3)],
+        [(9, 2), (10, 3), (7, 1)],
+        [(10, 3), (11, 3)],
+        [(9, 3)],
+        [],
+        [(11, 1)],
+        []
+    ]
+    adj = [[] for _ in range(len(map_names))]
+    weight = [[] for _ in range(len(map_names))]
+    for idxfrom, edges in enumerate(meta_graph):
+        for idxto, w in edges:
+            adj[idxfrom].append(idxto)
+            adj[idxto].append(idxfrom)
+            weight[idxfrom].append(w)
+            weight[idxto].append(w)
+    print(bellmanford(meta_graph, 0, len(adj)-1))
+    print(lis([10, 9, 2, 5, 3, 7, 101, 18]))
+    print(ex164([7, 89, 11, 88, 106, 4, 28, 71, 17]))
+    a = [
+        [7, 8, 3, 8, 8, 3],
+        [7, 8, 3, 3, 3, 3],
+        [1, 3, 3, 5, 8, 3],
+        [7, 6, 3, 5, 3, 3],
+        [0, 4, 3, 3, 3, 3],
+        [9, 9, 1, 3, 7, 3],
+    ]
+    print(ex235(a))
+    7 8 3 8 8 3
+    7 8 3 3 3 3
+    1 3 3 5 8 3
+    7 6 3 5 3 3
+    0 4 3 3 3 3
+    9 9 1 3 7 3
+    [4, 7, 11, 17, 28, 71, 88, 89, 106]
     map_names = {idx: c for idx, c in enumerate('abcdefghijkm')}
     # every edge only once, if a node has already all edges in previous iteration, then add an empty list
     meta_graph = [
@@ -777,7 +898,6 @@ if __name__ == '__main__':
     # for idx, edges in enumerate(mst):
     #    print(map_names[idx], '->', [map_names[i] for i in edges])
     print(MST_Prim(adj, weight))
-    '''
     # adjacency list of a graph
     map = {0:'cinta', 1:'pantaloni', 2:'mutande', 3:'felpa', 4:'canottiera'}
     adj = [[3], [0], [1], [], [3]]
